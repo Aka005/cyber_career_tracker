@@ -1,8 +1,8 @@
 # CYBER-CAREER-TRACKER
 
-As a Japanese American, I’ve always wanted to work overseas. After interning in Japan and the U.S., I built this project to explore and track opportunities across both countries.
+As a Japanese American, I’ve always wanted to work overseas. After interning in Japan last summer and in the U.S. this summer, I wanted to better understand and navigate the opportunities available across both countries.
 
-This is a centralized dashboard for managing job applications, academic programs, and career progress. It includes AI-powered parsing to make logging information faster and easier.
+This is a centralized career tracking dashboard tailored for cross-border job hunting between the U.S. and Japan. The platform provides a high-level view of company applications, academic programs, and streamlined entry management, with AI-powered parsing for fast and efficient data logging.
 
 I hope this tool is helpful for others looking for cybersecurity opportunities in the U.S., Japan, or other parts of the world.
 
