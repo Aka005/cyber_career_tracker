@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber Career Tracker — US ↔ Japan</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0e1a;--surface:#111827;--surface2:#1a2235;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--text:#e8eaf0;--muted:#7a8499;--dim:#4a5268;--blue:#4f8ef7;--purple:#a78bfa;--green:#34d399;--yellow:#fbbf24;--red:#f87171;--cyan:#38bdf8}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;min-height:100vh}
+  body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(79,142,247,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(79,142,247,0.025) 1px,transparent 1px);background-size:40px 40px}
+  .shell{position:relative;z-index:1;max-width:1340px;margin:0 auto;padding:0 24px}
+  header{padding:36px 0 0;border-bottom:1px solid var(--border)}
+  .hrow{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;padding-bottom:20px;flex-wrap:wrap}
+  .logo{display:flex;align-items:center;gap:12px}
+  .badge{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  h1{font-family:'Syne',sans-serif;font-size:21px;font-weight:800;letter-spacing:-.02em}
+  h1 em{color:var(--blue);font-style:normal}
+  .sub{font-size:11px;color:var(--muted);margin-top:2px;font-family:'DM Mono',monospace}
+  .stats{display:flex;gap:14px;flex-wrap:wrap}
+  .pill{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:7px 14px;display:flex;flex-direction:column;align-items:center;gap:1px}
+  .pill .n{font-family:'Syne',sans-serif;font-size:19px;font-weight:700}.pill .l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-family:'DM Mono',monospace}
+  .n.b{color:var(--blue)}.n.p{color:var(--purple)}.n.g{color:var(--green)}
+  .tabs{display:flex;gap:3px;padding:14px 0 0;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
+  .tab{padding:7px 16px;border-radius:8px 8px 0 0;border:1px solid transparent;border-bottom:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap;position:relative;top:1px}
+  .tab:hover{color:var(--text);background:var(--surface)}.tab.on{background:var(--surface);color:var(--text);border-color:var(--border);border-bottom-color:var(--surface)}
+  .tc{display:inline-block;margin-left:5px;background:var(--surface2);border-radius:99px;padding:1px 7px;font-size:11px;font-family:'DM Mono',monospace;color:var(--muted)}
+  .tab.on .tc{background:var(--blue);color:#fff}
+  .panel{display:none;padding:18px 0}.panel.on{display:block}
+  .ctrl{display:flex;gap:8px;padding-bottom:14px;flex-wrap:wrap;align-items:center}
+  .sw{flex:1;min-width:180px;max-width:320px;position:relative}
+  .sw svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted)}
+  input[type=search]{width:100%;padding:7px 10px 7px 32px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s}
+  input[type=search]:focus{border-color:var(--blue)}
+  input[type=search]::placeholder{color:var(--dim)}
+  select{padding:7px 28px 7px 10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%237a8499' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center}
+  select:focus{border-color:var(--blue)}
+  .ftag{padding:5px 11px;border-radius:99px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:11px;cursor:pointer;transition:all .15s;font-family:'DM Mono',monospace;white-space:nowrap}
+  .ftag:hover,.ftag.on{background:var(--blue);border-color:var(--blue);color:#fff}
+  .rc{margin-left:auto;font-size:11px;color:var(--muted);font-family:'DM Mono',monospace}
+  .tw{overflow-x:auto;border-radius:12px;border:1px solid var(--border)}
+  table{width:100%;border-collapse:collapse;min-width:860px}
+  thead th{padding:9px 13px;text-align:left;font-family:'DM Mono',monospace;font-size:10px;font-weight:500;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;background:var(--surface);border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none}
+  thead th:hover{color:var(--text)}.thead th .sa{opacity:.3;margin-left:3px}thead th.sorted .sa{opacity:1;color:var(--blue)}
+  tbody tr{border-bottom:1px solid var(--border);transition:background .1s;animation:fi .18s ease both}
+  tbody tr:hover{background:rgba(79,142,247,0.04)}tbody tr:last-child{border-bottom:none}
+  td{padding:10px 13px;vertical-align:middle}
+  .sec-row td{padding:5px 13px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:var(--surface2);border-top:1px solid var(--border)}
+  .co-name{font-weight:500;font-size:13px}.co-hq{font-size:11px;color:var(--muted);font-weight:300;margin-top:1px}
+  .nc{color:var(--muted);font-size:12px;max-width:260px;line-height:1.5}
+  .sc{font-family:'DM Mono',monospace;font-size:11px;color:var(--green);white-space:nowrap}
+  .dc{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);white-space:nowrap}
+  a.lnk{color:var(--blue);text-decoration:none;font-family:'DM Mono',monospace;font-size:11px}a.lnk:hover{text-decoration:underline}
+  .bdg{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:500;white-space:nowrap;font-family:'DM Mono',monospace}
+  .bH{background:rgba(52,211,153,.14);color:#34d399;border:1px solid rgba(52,211,153,.25)}
+  .bM{background:rgba(251,191,36,.14);color:#fbbf24;border:1px solid rgba(251,191,36,.25)}
+  .bL{background:rgba(248,113,113,.12);color:#f87171;border:1px solid rgba(248,113,113,.2)}
+  .bUS{background:rgba(79,142,247,.12);color:#93c5fd;border:1px solid rgba(147,197,253,.2)}
+  .bJP{background:rgba(245,158,11,.12);color:#fcd34d;border:1px solid rgba(252,211,77,.2)}
+  .bBO{background:rgba(52,211,153,.12);color:#6ee7b7;border:1px solid rgba(110,231,183,.2)}
+  .bTY{background:rgba(167,139,250,.1);color:#c4b5fd;border:1px solid rgba(196,181,253,.2)}
+  .bSEC{background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--border);font-size:10px}
+  .ssel{background:transparent;border:none;color:inherit;font-size:11px;cursor:pointer;font-family:'DM Mono',monospace;outline:none;appearance:none;padding:2px 8px;border-radius:99px;width:100%}
+  .s0{background:rgba(255,255,255,.05);color:var(--muted);border:1px solid var(--border)}
+  .s1{background:rgba(245,158,11,.14);color:#fbbf24;border:1px solid rgba(251,191,36,.25)}
+  .s2{background:rgba(56,189,248,.14);color:#7dd3fc;border:1px solid rgba(125,211,252,.25)}
+  .s3{background:rgba(167,139,250,.14);color:#c4b5fd;border:1px solid rgba(196,181,253,.25)}
+  .s4{background:rgba(52,211,153,.18);color:#6ee7b7;border:1px solid rgba(110,231,183,.3)}
+  .s5{background:rgba(239,68,68,.12);color:#fca5a5;border:1px solid rgba(252,165,165,.2)}
+  .s6{background:rgba(255,255,255,.05);color:var(--dim);border:1px solid var(--border)}
+  .empty{text-align:center;padding:50px 20px;color:var(--muted)}.empty .ei{font-size:36px;margin-bottom:10px}
+  .ai-bar{display:flex;gap:8px;align-items:center;margin-bottom:14px;background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:10px 14px;flex-wrap:wrap}
+  .ai-bar input[type=text]{flex:1;min-width:240px;padding:6px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s}
+  .ai-bar input[type=text]:focus{border-color:var(--blue)}
+  .ai-bar input[type=text]::placeholder{color:var(--dim)}
+  .ai-btn{padding:7px 16px;background:var(--blue);border:none;border-radius:7px;color:#fff;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:opacity .15s;white-space:nowrap}
+  .ai-btn:hover{opacity:.85}.ai-btn:disabled{opacity:.4;cursor:not-allowed}
+  .ai-hint{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;width:100%}
+  .ai-ok{font-size:12px;color:var(--green);font-family:'DM Mono',monospace;white-space:nowrap}
+  .ai-err{font-size:12px;color:var(--red);font-family:'DM Mono',monospace;white-space:nowrap}
+  .spin{display:inline-block;width:11px;height:11px;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:4px}
+  .dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:13px;margin-bottom:20px}
+  .dcard{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+  .dcard h3{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;font-family:'DM Mono',monospace}
+  .ibar{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .iname{font-size:12px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .icount{font-size:11px;font-family:'DM Mono',monospace;color:var(--muted);min-width:20px;text-align:right}
+  .btrack{flex:1;height:3px;background:var(--surface2);border-radius:99px;overflow:hidden}
+  .bfill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--blue),var(--purple))}
+  .tl{display:flex;flex-direction:column}
+  .tli{display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)}
+  .tli:last-child{border-bottom:none}.tldot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:7px}
+  .tlp{font-family:'DM Mono',monospace;font-size:11px;color:var(--blue);min-width:120px}
+  .tla{font-size:12px;line-height:1.5}
+  .cl{display:flex;flex-direction:column;gap:7px}
+  .ci{display:flex;align-items:flex-start;gap:9px;padding:7px 10px;background:var(--surface2);border-radius:8px}
+  .ci-i{font-size:14px;flex-shrink:0}.ci-n{font-size:12px;font-weight:500}.ci-d{font-size:11px;color:var(--muted);margin-top:1px}
+  .sleg{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+  .sli{display:flex;align-items:center;gap:7px;padding:5px 9px;background:var(--surface2);border-radius:6px}
+  .sdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}.slbl{font-size:12px;color:var(--muted)}
+  @keyframes fi{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+  @keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <div class="hrow">
+      <div class="logo">
+        <div class="badge">🛡️</div>
+        <div>
+          <h1>Cyber Career Tracker <em>US ↔ JP</em></h1>
+          <div class="sub">Security+ Certified · Dual Citizen · Spring 2027 · Cybersecurity Major</div>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="pill"><span class="n b" id="st-co">0</span><span class="l">Companies</span></div>
+        <div class="pill"><span class="n p" id="st-pg">0</span><span class="l">Programs</span></div>
+        <div class="pill"><span class="n g" id="st-ap">0</span><span class="l">Applied</span></div>
+      </div>
+    </div>
+    <nav class="tabs">
+      <button class="tab on" data-tab="co">🏢 Companies <span class="tc" id="tc-co">0</span></button>
+      <button class="tab" data-tab="pg">🎓 Grad Programs <span class="tc" id="tc-pg">0</span></button>
+      <button class="tab" data-tab="db">📊 Dashboard</button>
+    </nav>
+  </header>
+
+  <div id="tab-co" class="panel on">
+    <div class="ai-bar">
+      <input type="text" id="co-ai-in" placeholder='e.g. "Add Cloudflare, security engineer, US company with Tokyo office, high priority"'>
+      <button class="ai-btn" id="co-ai-btn" onclick="aiAdd('co')">✦ Add with AI</button>
+      <span id="co-ai-msg"></span>
+      <div class="ai-hint">Describe a company in plain English — AI parses the details and adds it instantly. Press Enter or click the button.</div>
+    </div>
+    <div class="ctrl">
+      <div class="sw"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="search" id="co-q" placeholder="Search companies, roles…"></div>
+      <select id="co-ind"><option value="">All Industries</option></select>
+      <select id="co-dir"><option value="">All Directions</option><option>US co. → Japan office</option><option>JP co. → US office</option><option>Both directions</option></select>
+      <button class="ftag" id="ft-hi" onclick="toggle('coHi',this)">⬤ High Priority</button>
+      <button class="ftag" id="ft-ap" onclick="toggle('coAp',this)">Applied</button>
+      <span class="rc" id="co-rc"></span>
+    </div>
+    <div class="tw"><table id="co-tbl">
+      <thead><tr>
+        <th data-s="company">Company <span class="sa">↕</span></th>
+        <th data-s="industry">Industry <span class="sa">↕</span></th>
+        <th data-s="direction">Direction <span class="sa">↕</span></th>
+        <th data-s="role">Role Type <span class="sa">↕</span></th>
+        <th data-s="deadline">Deadline <span class="sa">↕</span></th>
+        <th data-s="priority">Priority <span class="sa">↕</span></th>
+        <th>Status</th><th>Link</th><th>Notes</th>
+      </tr></thead>
+      <tbody id="co-body"></tbody>
+    </table></div>
+  </div>
+
+  <div id="tab-pg" class="panel">
+    <div class="ai-bar">
+      <input type="text" id="pg-ai-in" placeholder='e.g. "Add NSA scholarship, government program, rolling deadline, high priority"'>
+      <button class="ai-btn" id="pg-ai-btn" onclick="aiAdd('pg')">✦ Add with AI</button>
+      <span id="pg-ai-msg"></span>
+      <div class="ai-hint">Describe a grad program or fellowship — AI will parse and add it to your tracker.</div>
+    </div>
+    <div class="ctrl">
+      <div class="sw"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="search" id="pg-q" placeholder="Search programs…"></div>
+      <select id="pg-type"><option value="">All Types</option></select>
+      <select id="pg-sec"><option value="">All Sectors</option></select>
+      <button class="ftag" id="ft-pg-hi" onclick="toggle('pgHi',this)">⬤ High Priority</button>
+      <span class="rc" id="pg-rc"></span>
+    </div>
+    <div class="tw"><table id="pg-tbl">
+      <thead><tr>
+        <th data-s="program">Program <span class="sa">↕</span></th>
+        <th data-s="company">Company <span class="sa">↕</span></th>
+        <th data-s="type">Type <span class="sa">↕</span></th>
+        <th data-s="sector">Sector <span class="sa">↕</span></th>
+        <th data-s="duration">Duration <span class="sa">↕</span></th>
+        <th data-s="deadline">Deadline <span class="sa">↕</span></th>
+        <th>Salary</th>
+        <th data-s="priority">Priority <span class="sa">↕</span></th>
+        <th>Status</th><th>Notes</th><th>Link</th>
+      </tr></thead>
+      <tbody id="pg-body"></tbody>
+    </table></div>
+  </div>
+
+  <div id="tab-db" class="panel">
+    <div class="dgrid">
+      <div class="dcard"><h3>Companies by Industry</h3><div id="ind-chart"></div></div>
+      <div class="dcard"><h3>Application Timeline</h3>
+        <div class="tl">
+          <div class="tli"><div class="tldot" style="background:var(--blue)"></div><div><div class="tlp">Now → Jul 2026</div><div class="tla">Research, tailor resume, earn CySA+ or AWS Security Specialty</div></div></div>
+          <div class="tli"><div class="tldot" style="background:var(--purple)"></div><div><div class="tlp">Aug–Sep 2026</div><div class="tla">Apply: Finance, Big Tech, Cyber, Defense</div></div></div>
+          <div class="tli"><div class="tldot" style="background:var(--yellow)"></div><div><div class="tlp">Oct–Nov 2026</div><div class="tla">Apply: Manufacturing, Consulting, Healthcare, Telecom</div></div></div>
+          <div class="tli"><div class="tldot" style="background:var(--cyan)"></div><div><div class="tlp">Dec 2026</div><div class="tla">Follow up, late openers, schedule interviews</div></div></div>
+          <div class="tli"><div class="tldot" style="background:var(--green)"></div><div><div class="tlp">Jan–Mar 2027</div><div class="tla">Interviews, offers, negotiate</div></div></div>
+          <div class="tli"><div class="tldot" style="background:var(--green)"></div><div><div class="tlp">May 2027 🎉</div><div class="tla">Graduate → Start full-time</div></div></div>
+        </div>
+      </div>
+      <div class="dcard"><h3>Certifications Roadmap</h3>
+        <div class="cl">
+          <div class="ci"><div class="ci-i">✅</div><div><div class="ci-n">Security+ (Done!)</div><div class="ci-d">Already completed — great head start</div></div></div>
+          <div class="ci"><div class="ci-i">⭐</div><div><div class="ci-n">CySA+</div><div class="ci-d">Natural follow-up; threat analysis focus</div></div></div>
+          <div class="ci"><div class="ci-i">☁️</div><div><div class="ci-n">AWS Security Specialty</div><div class="ci-d">Highest ROI — used at almost every company here</div></div></div>
+          <div class="ci"><div class="ci-i">🗡️</div><div><div class="ci-n">CEH</div><div class="ci-d">Opens pen testing and defense roles</div></div></div>
+          <div class="ci"><div class="ci-i">🇯🇵</div><div><div class="ci-n">JLPT N3 Japanese</div><div class="ci-d">Differentiator at every JP company on this list</div></div></div>
+          <div class="ci"><div class="ci-i">🏆</div><div><div class="ci-n">CISSP (after 2 yrs exp)</div><div class="ci-d">Gold standard — start studying now</div></div></div>
+        </div>
+      </div>
+      <div class="dcard"><h3>Status Legend</h3><div class="sleg" id="sleg"></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const STATUSES=['Not Started','Researching','Applied','Interviewing','Offer','Rejected','Declined'];
+const SCLS=['s0','s1','s2','s3','s4','s5','s6'];
+const SDOT=['#4a5268','#f59e0b','#60a5fa','#c4b5fd','#6ee7b7','#fca5a5','#6b7280'];
+
+let COS=[
+  {industry:"Finance & Banking",company:"JPMorgan Chase",hq:"New York, NY",direction:"US co. → Japan office",role:"SOC Analyst / Cyber Risk",deadline:"Oct 2026",priority:"High",url:"https://careers.jpmorgan.com",notes:"Top finance cyber program; Tokyo rotation possible for dual citizens."},
+  {industry:"Finance & Banking",company:"Goldman Sachs",hq:"New York, NY",direction:"US co. → Japan office",role:"Cybersecurity Analyst",deadline:"Oct 2026",priority:"High",url:"https://goldmansachs.com/careers",notes:"Tokyo new analyst program; bilingual candidates stand out."},
+  {industry:"Finance & Banking",company:"Morgan Stanley",hq:"New York, NY",direction:"US co. → Japan office",role:"Info Security Analyst",deadline:"Nov 2026",priority:"High",url:"https://morganstanley.com/people-opportunities",notes:"Early career programs; internal transfer to Japan possible."},
+  {industry:"Finance & Banking",company:"Mastercard",hq:"Purchase, NY",direction:"Both directions",role:"Cyber Security / Fraud Prevention",deadline:"Oct 2026",priority:"High",url:"https://careers.mastercard.com",notes:"Launch grad program with Tokyo rotation available."},
+  {industry:"Finance & Banking",company:"Visa Inc.",hq:"Foster City, CA",direction:"US co. → Japan office",role:"Security Engineer",deadline:"Nov 2026",priority:"High",url:"https://careers.visa.com",notes:"Payments security; Japan office active."},
+  {industry:"Finance & Banking",company:"Citibank",hq:"New York, NY",direction:"US co. → Japan office",role:"Cyber Risk Analyst",deadline:"Nov 2026",priority:"Medium",url:"https://jobs.citi.com",notes:"Strong internal mobility program to Tokyo."},
+  {industry:"Finance & Banking",company:"SMFG (Sumitomo Mitsui)",hq:"Tokyo, JP",direction:"JP co. → US office",role:"Cybersecurity Audit Associate",deadline:"Dec 2026",priority:"High",url:"https://smfgamericas.com/careers",notes:"Explicitly hires bilingual US-based analysts bridging US/Japan."},
+  {industry:"Finance & Banking",company:"Mizuho Financial",hq:"Tokyo, JP",direction:"JP co. → US office",role:"Cyber Risk / GRC",deadline:"Dec 2026",priority:"Medium",url:"https://mizuhogroup.com/careers",notes:"NY Americas HQ + Tokyo parent; strong bilingual preference."},
+  {industry:"Finance & Banking",company:"Nomura Holdings",hq:"Tokyo, JP",direction:"JP co. → US office",role:"Information Security Analyst",deadline:"Dec 2026",priority:"Medium",url:"https://nomura.com/careers",notes:"Investment bank; NY regional HQ + Tokyo parent."},
+  {industry:"Finance & Banking",company:"American Express",hq:"New York, NY",direction:"US co. → Japan office",role:"Cybersecurity GRC",deadline:"Nov 2026",priority:"Medium",url:"https://jobs.americanexpress.com",notes:"AmEx Japan consumer business active; no JP visa needed."},
+  {industry:"Finance & Banking",company:"BlackRock",hq:"New York, NY",direction:"US co. → Japan office",role:"Info Security Engineer",deadline:"Nov 2026",priority:"Medium",url:"https://careers.blackrock.com",notes:"Growing cyber team; Tokyo office present."},
+  {industry:"Pure Cybersecurity",company:"Trend Micro",hq:"Tokyo, JP",direction:"Both directions",role:"Security Researcher / Analyst",deadline:"Oct 2026",priority:"High",url:"https://trendmicro.com/en_us/about/careers",notes:"Japan-founded, US HQ — best of both worlds for a dual citizen."},
+  {industry:"Pure Cybersecurity",company:"Palo Alto Networks",hq:"Santa Clara, CA",direction:"US co. → Japan office",role:"SOC Analyst / Threat Intel",deadline:"Oct 2026",priority:"High",url:"https://jobs.paloaltonetworks.com",notes:"Top name on any cyber resume. Fast-growing Tokyo office."},
+  {industry:"Pure Cybersecurity",company:"CrowdStrike",hq:"Austin, TX",direction:"US co. → Japan office",role:"Security Analyst (Falcon)",deadline:"Oct 2026",priority:"High",url:"https://crowdstrike.com/careers",notes:"Cloud-native EDR leader. Strong new grad pipeline. Tokyo office."},
+  {industry:"Pure Cybersecurity",company:"NTT Security",hq:"Tokyo, JP",direction:"Both directions",role:"Security Operations / MSSP",deadline:"Oct 2026",priority:"High",url:"https://security.ntt/careers",notes:"Japan parent; massive global SOC network."},
+  {industry:"Pure Cybersecurity",company:"Secureworks",hq:"Atlanta, GA",direction:"US co. → Japan office",role:"Threat Detection Analyst",deadline:"Nov 2026",priority:"Medium",url:"https://secureworks.com/careers",notes:"Managed security; solid entry-level pipeline."},
+  {industry:"Pure Cybersecurity",company:"Rapid7",hq:"Boston, MA",direction:"US co. → Japan office",role:"Security Engineer",deadline:"Nov 2026",priority:"Medium",url:"https://rapid7.com/careers",notes:"Vulnerability management leader. APAC expansion."},
+  {industry:"Pure Cybersecurity",company:"SentinelOne",hq:"Mountain View, CA",direction:"US co. → Japan office",role:"Threat Intelligence Analyst",deadline:"Nov 2026",priority:"Medium",url:"https://sentinelone.com/careers",notes:"AI-driven EDR; fastest growing in the space. Tokyo office."},
+  {industry:"Pure Cybersecurity",company:"Okta",hq:"San Francisco, CA",direction:"US co. → Japan office",role:"Identity Security Engineer",deadline:"Nov 2026",priority:"Medium",url:"https://okta.com/company/careers",notes:"Identity = fastest growing cyber niche. Japan office."},
+  {industry:"Big Tech & Cloud",company:"Microsoft Japan",hq:"Redmond, WA",direction:"US co. → Japan office",role:"Security Engineer / Sentinel",deadline:"Oct 2026",priority:"High",url:"https://careers.microsoft.com",notes:"Azure Sentinel #1 SIEM. Large Tokyo office; bilingual valued."},
+  {industry:"Big Tech & Cloud",company:"AWS Japan",hq:"Seattle, WA",direction:"US co. → Japan office",role:"Cloud Security Engineer",deadline:"Oct 2026",priority:"High",url:"https://amazon.jobs",notes:"Tokyo cloud security growth. AWS Security Specialty cert synergy."},
+  {industry:"Big Tech & Cloud",company:"Google Japan",hq:"Mountain View, CA",direction:"US co. → Japan office",role:"Security Engineer / Chronicle",deadline:"Nov 2026",priority:"High",url:"https://careers.google.com",notes:"Chronicle Security; Tokyo office. New grad programs available."},
+  {industry:"Big Tech & Cloud",company:"IBM Japan",hq:"Armonk, NY",direction:"US co. → Japan office",role:"Cybersecurity Consultant",deadline:"Nov 2026",priority:"Medium",url:"https://ibm.com/employment",notes:"Large Tokyo consulting practice. QRadar SIEM; X-Force threat intel."},
+  {industry:"Big Tech & Cloud",company:"Fujitsu Americas",hq:"Tokyo, JP",direction:"Both directions",role:"Security Architect / Analyst",deadline:"Oct 2026",priority:"High",url:"https://fujitsu.com/global/about/jobs",notes:"Japan HQ = built-in rotation path. US offices + Japan parent."},
+  {industry:"Big Tech & Cloud",company:"NEC Corporation",hq:"Tokyo, JP",direction:"JP co. → US office",role:"Cybersecurity Engineer",deadline:"Nov 2026",priority:"Medium",url:"https://nec.com/en/global/careers",notes:"Japan tech giant; security division; US presence."},
+  {industry:"Big Tech & Cloud",company:"Rakuten",hq:"Tokyo, JP",direction:"JP co. → US office",role:"Security Engineer",deadline:"Nov 2026",priority:"Medium",url:"https://global.rakuten.com/corp/careers",notes:"English is official company language. Tokyo HQ."},
+  {industry:"Automotive & Manufacturing",company:"Toyota Tsusho Systems",hq:"Tokyo, JP",direction:"JP co. → US office",role:"Bilingual Cybersecurity Analyst",deadline:"Oct 2026",priority:"High",url:"https://toyota-tsusho.com/english",notes:"Explicitly hires bilingual JP/EN analysts in Plano, TX."},
+  {industry:"Automotive & Manufacturing",company:"Bridgestone Americas",hq:"Nashville, TN",direction:"JP co. → US office",role:"Senior Cyber Security Engineer",deadline:"Nov 2026",priority:"High",url:"https://bridgestoneamericas.com/careers",notes:"Japan parent; Nashville HQ. Active cyber engineering hiring."},
+  {industry:"Automotive & Manufacturing",company:"Honda North America",hq:"Torrance, CA",direction:"JP co. → US office",role:"OT/IoT Security Engineer",deadline:"Nov 2026",priority:"Medium",url:"https://hondajobs.com",notes:"Connected vehicle / OT security. Japan parent."},
+  {industry:"Automotive & Manufacturing",company:"Denso",hq:"Kariya, JP",direction:"Both directions",role:"Automotive Cybersecurity (SDV)",deadline:"Oct 2026",priority:"High",url:"https://denso.com/global/en/careers",notes:"UN-R155 / ISO 21434 compliance roles. Fastest growing automotive cyber niche."},
+  {industry:"Automotive & Manufacturing",company:"Panasonic North America",hq:"Newark, NJ",direction:"JP co. → US office",role:"IoT Security Engineer",deadline:"Dec 2026",priority:"Medium",url:"https://na.panasonic.com/us/careers",notes:"Smart devices and EV battery security. Japan parent."},
+  {industry:"Gaming & Consumer Tech",company:"Nintendo of America",hq:"Redmond, WA",direction:"JP co. → US office",role:"IT Security Specialist",deadline:"Nov 2026",priority:"High",url:"https://nintendo.com/en-US/careers",notes:"Nintendo brand; Japan rotation possible for dual citizens."},
+  {industry:"Gaming & Consumer Tech",company:"Sony (US HQ)",hq:"New York, NY",direction:"JP co. → US office",role:"Cybersecurity Analyst / InfoSec",deadline:"Nov 2026",priority:"High",url:"https://sonyusa-careers.com",notes:"NY headquarters; exposure to Sony Japan teams."},
+  {industry:"Gaming & Consumer Tech",company:"Square Enix America",hq:"Tokyo, JP",direction:"JP co. → US office",role:"Information Security",deadline:"Dec 2026",priority:"Low",url:"https://na.square-enix-games.com/en-US/careers",notes:"Final Fantasy publisher; Japan HQ; El Segundo CA office."},
+  {industry:"Defense & Aerospace",company:"Booz Allen Hamilton",hq:"McLean, VA",direction:"US co. → Japan office",role:"Defensive Cyber Analyst",deadline:"Sep 2026",priority:"High",url:"https://careers.boozallen.com",notes:"Cyber roles at Yokosuka and Okinawa bases. Bilingual = huge advantage."},
+  {industry:"Defense & Aerospace",company:"Leidos",hq:"Reston, VA",direction:"US co. → Japan office",role:"Cyber Security Engineer",deadline:"Sep 2026",priority:"High",url:"https://leidos.com/careers",notes:"Government IT; Japan military contracts. Active Japan postings."},
+  {industry:"Defense & Aerospace",company:"Raytheon / RTX",hq:"Arlington, VA",direction:"US co. → Japan office",role:"Cybersecurity Engineer",deadline:"Sep 2026",priority:"Medium",url:"https://rtx.com/careers",notes:"Defense cybersecurity; Japan-US defense ties. Clearance needed."},
+  {industry:"Defense & Aerospace",company:"Mitsubishi Electric",hq:"Tokyo, JP",direction:"JP co. → US office",role:"Cybersecurity Engineer",deadline:"Nov 2026",priority:"Medium",url:"https://mitsubishielectric.com/en/careers",notes:"Aerospace and defense cyber; Japan HQ + US offices."},
+  {industry:"Healthcare & Life Sciences",company:"Medtronic Japan",hq:"Dublin, IE",direction:"US co. → Japan office",role:"Medical Device Cybersecurity",deadline:"Dec 2026",priority:"Medium",url:"https://jobs.medtronic.com",notes:"FDA medical device cyber = growing niche. Japan subsidiary."},
+  {industry:"Healthcare & Life Sciences",company:"Olympus Americas",hq:"Center Valley, PA",direction:"JP co. → US office",role:"IT/OT Security Engineer",deadline:"Dec 2026",priority:"Medium",url:"https://olympus-ossa.com/careers",notes:"Japan parent; PA office close to State College."},
+  {industry:"Healthcare & Life Sciences",company:"Takeda Pharmaceuticals",hq:"Osaka, JP",direction:"JP co. → US office",role:"Cyber Security Analyst",deadline:"Dec 2026",priority:"Medium",url:"https://takeda.com/en-us/about/careers",notes:"Top JP pharma; US HQ in Cambridge MA + Japan parent."},
+  {industry:"Consulting",company:"Deloitte Japan",hq:"New York, NY",direction:"US co. → Japan office",role:"Cyber Risk Consultant",deadline:"Oct 2026",priority:"High",url:"https://deloitte.com/global/en/careers",notes:"Tokyo office; defensive cyber roles active. Strong new grad pipeline."},
+  {industry:"Consulting",company:"Accenture Japan",hq:"Dublin, IE",direction:"US co. → Japan office",role:"Security Consultant / Analyst",deadline:"Oct 2026",priority:"High",url:"https://accenture.com/us-en/careers",notes:"Large Tokyo security practice. Rotates talent globally."},
+  {industry:"Consulting",company:"PwC Japan",hq:"New York, NY",direction:"US co. → Japan office",role:"Cyber Risk and Compliance",deadline:"Nov 2026",priority:"High",url:"https://pwc.com/us/en/careers",notes:"Big 4; GRC focus. PwC Japan cybersecurity advisory."},
+  {industry:"Consulting",company:"NRI (Nomura Research)",hq:"Tokyo, JP",direction:"JP co. → US office",role:"IT Security / GRC",deadline:"Dec 2026",priority:"Medium",url:"https://nri.com/en/career",notes:"Japan's top IT consulting firm. US operations + Japan parent."},
+  {industry:"Telecom & Infrastructure",company:"NTT Data",hq:"Tokyo, JP",direction:"Both directions",role:"Security Engineer / MSSP",deadline:"Oct 2026",priority:"High",url:"https://nttdata.com/global/en/careers",notes:"NTT group = huge Japan-US footprint. Global IT services."},
+  {industry:"Telecom & Infrastructure",company:"SoftBank Corp",hq:"Tokyo, JP",direction:"JP co. → US office",role:"Network Security Engineer",deadline:"Dec 2026",priority:"Medium",url:"https://softbank.jp/en/careers",notes:"Japan's #2 telco; security division active."},
+  {industry:"Telecom & Infrastructure",company:"KDDI America",hq:"Tokyo, JP",direction:"JP co. → US office",role:"Network / Cyber Security",deadline:"Dec 2026",priority:"Medium",url:"https://kddi.com/english/corporate/careers",notes:"Japan's #2 telco; NY subsidiary."},
+  {industry:"Insurance & Risk",company:"Tokio Marine America",hq:"Tokyo, JP",direction:"JP co. → US office",role:"Information Security Analyst",deadline:"Dec 2026",priority:"Medium",url:"https://tokiomarine.com/us/en/careers",notes:"Japan's top insurer; NY office."},
+  {industry:"Insurance & Risk",company:"Aflac",hq:"Columbus, GA",direction:"US co. → Japan office",role:"Global Security Assurance",deadline:"Dec 2026",priority:"Medium",url:"https://jobs.aflac.com",notes:"Japan is #1 revenue market. Cyber roles bridge US-JP teams."},
+  {industry:"Insurance & Risk",company:"Marsh McLennan",hq:"New York, NY",direction:"US co. → Japan office",role:"Cyber Risk Consultant",deadline:"Dec 2026",priority:"Medium",url:"https://mmc.com/careers",notes:"Global risk consulting; Japan office. Cyber risk advisory is a hot niche."},
+];
+const COS_BASE=COS.length;
+
+let PGS=[
+  {type:"New Grad Rotational",program:"Cybersecurity Analyst Development Program",company:"Booz Allen Hamilton",sector:"Defense / Consulting",duration:"2 years",deadline:"Oct 2026",salary:"$75k-$95k",priority:"High",url:"https://careers.boozallen.com",notes:"SOC, GRC, pen test rotations. Clearance sponsorship possible."},
+  {type:"New Grad Rotational",program:"Technology Analyst Program (Security Track)",company:"Deloitte",sector:"Consulting",duration:"2 years",deadline:"Oct 2026",salary:"$85k-$100k",priority:"High",url:"https://deloitte.com/global/en/careers",notes:"Rotational across cyber risk, forensics, cloud security. Japan office pathway."},
+  {type:"New Grad Rotational",program:"Technology Development Program - Security",company:"JPMorgan Chase",sector:"Finance",duration:"2 years",deadline:"Oct 2026",salary:"$110k-$130k",priority:"High",url:"https://careers.jpmorgan.com",notes:"Rotational: SOC to AppSec to Cloud Security. Top finance cyber program."},
+  {type:"New Grad Rotational",program:"Mastercard Launch Program (Cybersecurity)",company:"Mastercard",sector:"Finance / Payments",duration:"18 months",deadline:"Oct 2026",salary:"$90k-$110k",priority:"High",url:"https://careers.mastercard.com",notes:"Global cohort; 3 rotations across fraud, cyber, risk. Tokyo rotation available."},
+  {type:"New Grad Rotational",program:"Technology Analyst - Cybersecurity",company:"Goldman Sachs",sector:"Finance",duration:"2 years",deadline:"Sep 2026",salary:"$125k-$150k",priority:"High",url:"https://goldmansachs.com/careers",notes:"Analyst program with Japan rotation option. Apply early — very competitive."},
+  {type:"New Grad Rotational",program:"Security Engineering Residency",company:"Google",sector:"Big Tech",duration:"1 year",deadline:"Oct 2026",salary:"$140k-$175k",priority:"High",url:"https://careers.google.com",notes:"Entry-level security engineering path. SWE-adjacent; coding required."},
+  {type:"New Grad Rotational",program:"Security New Grad Program",company:"Microsoft",sector:"Big Tech",duration:"Full-time",deadline:"Oct 2026",salary:"$130k-$160k",priority:"High",url:"https://careers.microsoft.com",notes:"MSRC, Azure Security, Identity and Access teams. Strong mentorship."},
+  {type:"New Grad Rotational",program:"AWS Security Graduate Program",company:"Amazon / AWS",sector:"Big Tech / Cloud",duration:"Full-time",deadline:"Oct 2026",salary:"$130k-$165k",priority:"High",url:"https://amazon.jobs",notes:"Security engineering and architecture across AWS services."},
+  {type:"New Grad Rotational",program:"Technology Analyst Program - Cyber",company:"Morgan Stanley",sector:"Finance",duration:"2 years",deadline:"Nov 2026",salary:"$110k-$135k",priority:"High",url:"https://morganstanley.com/people-opportunities",notes:"3 rotations; info security, risk, infrastructure. Japan office exposure."},
+  {type:"New Grad Rotational",program:"Cybersecurity Graduate Hire",company:"Accenture",sector:"Consulting",duration:"Full-time",deadline:"Oct 2026",salary:"$75k-$95k",priority:"High",url:"https://accenture.com/us-en/careers",notes:"Security consulting fast track. Global rotation; Tokyo possible."},
+  {type:"New Grad Rotational",program:"New Analyst - Cyber Risk (PwC)",company:"PwC",sector:"Consulting",duration:"Full-time",deadline:"Oct 2026",salary:"$80k-$100k",priority:"High",url:"https://pwc.com/us/en/careers",notes:"Cyber risk and compliance advisory. Strong Japan office path."},
+  {type:"New Grad Rotational",program:"Security Graduate Hire",company:"Palo Alto Networks",sector:"Cybersecurity",duration:"Full-time",deadline:"Oct 2026",salary:"$120k-$150k",priority:"High",url:"https://jobs.paloaltonetworks.com",notes:"Unit 42, Cortex, or Product Security tracks. Top cyber brand."},
+  {type:"New Grad Rotational",program:"University Hire - Threat Intelligence",company:"CrowdStrike",sector:"Cybersecurity",duration:"Full-time",deadline:"Oct 2026",salary:"$110k-$140k",priority:"High",url:"https://crowdstrike.com/careers",notes:"Falcon platform roles; strong new grad pipeline."},
+  {type:"New Grad Rotational",program:"Cybersecurity New Grad",company:"Trend Micro",sector:"Cybersecurity",duration:"Full-time",deadline:"Oct 2026",salary:"$90k-$115k",priority:"High",url:"https://trendmicro.com/en_us/about/careers",notes:"Japan-founded; best dual-country option for cyber new grads."},
+  {type:"New Grad Rotational",program:"NTT Data New Graduate Program",company:"NTT Data",sector:"IT Services / Telecom",duration:"2 years",deadline:"Nov 2026",salary:"$75k-$95k",priority:"High",url:"https://nttdata.com/global/en/careers",notes:"Global rotation; Japan HQ connection built in. US and Tokyo options."},
+  {type:"New Grad Rotational",program:"Fujitsu Graduate Program (Security)",company:"Fujitsu",sector:"IT Services",duration:"Full-time",deadline:"Nov 2026",salary:"$75k-$95k",priority:"High",url:"https://fujitsu.com/global/about/jobs",notes:"Japan HQ; US and Tokyo positions. Best structured Japan-pipeline."},
+  {type:"Government Program",program:"CyberCorps: Scholarship for Service (SFS)",company:"NSF / DHS",sector:"Government",duration:"2 yrs service",deadline:"Jan 2027",salary:"Full tuition + $25k-$34k",priority:"High",url:"https://sfs.opm.gov",notes:"Full scholarship + stipend for 2 years federal gov service. One of the best programs in the field."},
+  {type:"Government Program",program:"DHS Cybersecurity Talent Management (CTMS)",company:"Dept. of Homeland Security",sector:"Government",duration:"Full-time",deadline:"Rolling",salary:"$70k-$110k GS",priority:"High",url:"https://www.dhs.gov/ctms",notes:"Streamlined hiring; bypasses standard USAjobs process. Fastest gov path."},
+  {type:"Government Program",program:"NSA NCEP - National Cybersecurity Excellence",company:"NSA",sector:"Intelligence / Defense",duration:"Full-time",deadline:"Dec 2026",salary:"$80k-$120k",priority:"Medium",url:"https://intelligencecareers.gov/nsa",notes:"NSA's university partnership program; direct hire pipeline."},
+  {type:"Government Program",program:"CISA Cybersecurity - Full-Time Pipeline",company:"CISA",sector:"Government",duration:"Full-time",deadline:"Rolling",salary:"$60k-$95k GS",priority:"Medium",url:"https://cisa.gov/careers",notes:"Convert internship to FTE. Strong mentorship in national cyber policy."},
+  {type:"Government Program",program:"DOD Cyber Excepted Service (CES)",company:"Dept. of Defense",sector:"Defense",duration:"Full-time",deadline:"Rolling",salary:"$70k-$115k",priority:"Medium",url:"https://dc3.mil/Careers",notes:"Special hiring authority for cyber roles across all DOD components."},
+  {type:"Fellowship",program:"MITRE Cyber Fellowship",company:"MITRE Corporation",sector:"Defense / R&D",duration:"1 year to FTE",deadline:"Nov 2026",salary:"$85k-$105k",priority:"High",url:"https://mitre.org/careers",notes:"ATT&CK framework creators. Excellent for threat intel careers."},
+  {type:"Fellowship",program:"Atlantic Council Cyber Statecraft Fellowship",company:"Atlantic Council",sector:"Policy / Cyber",duration:"1 year",deadline:"Dec 2026",salary:"~$50k stipend",priority:"Medium",url:"https://atlanticcouncil.org",notes:"Cyber policy + international security. Great US-Japan angle."},
+  {type:"Fellowship",program:"SANS Technology Institute Fellowship",company:"SANS",sector:"Cybersecurity Education",duration:"Full-time study",deadline:"Rolling",salary:"Scholarship avail.",priority:"Medium",url:"https://sans.edu",notes:"Graduate programs + scholarships. Industry-recognized certs built in."},
+  {type:"Fellowship",program:"Cisco Global Cybersecurity Scholarship",company:"Cisco / NetAcad",sector:"Networking / Cyber",duration:"6 months",deadline:"Rolling",salary:"Free + job placement",priority:"Medium",url:"https://skillsforall.com",notes:"Free CCNA/CyberOps training + hiring pathway. Good Security+ supplement."},
+  {type:"Graduate Hiring",program:"KPMG Cyber Ignition Program",company:"KPMG",sector:"Consulting",duration:"Full-time",deadline:"Nov 2026",salary:"$75k-$95k",priority:"Medium",url:"https://kpmg.com",notes:"New grad hire with dedicated cyber upskilling. Big 4 network."},
+  {type:"Graduate Hiring",program:"Raytheon / RTX Cyber Leadership Program",company:"Raytheon / RTX",sector:"Defense / Aerospace",duration:"2 years",deadline:"Sep 2026",salary:"$80k-$100k",priority:"Medium",url:"https://rtx.com/careers",notes:"Rotational cyber leadership for new grads. Clearance sponsorship."},
+  {type:"Graduate Hiring",program:"Leidos Cyber Futures Program",company:"Leidos",sector:"Defense / IT",duration:"2 years",deadline:"Sep 2026",salary:"$75k-$95k",priority:"High",url:"https://leidos.com/careers",notes:"Entry-level cyber with clearance sponsorship; Japan postings available."},
+  {type:"Graduate Hiring",program:"Mandiant / Google Threat Intelligence",company:"Google / Mandiant",sector:"Cybersecurity / Threat Intel",duration:"Full-time",deadline:"Oct 2026",salary:"$130k-$160k",priority:"High",url:"https://careers.google.com",notes:"One of the most prestigious threat intel brands. Highly competitive."},
+  {type:"Graduate Hiring",program:"IBM Security Consulting New Grad",company:"IBM",sector:"Consulting / Tech",duration:"Full-time",deadline:"Nov 2026",salary:"$85k-$110k",priority:"Medium",url:"https://ibm.com/employment",notes:"QRadar, X-Force, Cloud Security tracks. Japan office rotation possible."},
+  {type:"Graduate Hiring",program:"SentinelOne University Hire",company:"SentinelOne",sector:"Cybersecurity / AI",duration:"Full-time",deadline:"Nov 2026",salary:"$100k-$130k",priority:"Medium",url:"https://sentinelone.com/careers",notes:"AI-native EDR; fastest growing in the space."},
+];
+const PGS_BASE=PGS.length;
+
+const STATUSES_IDX={};STATUSES.forEach((s,i)=>STATUSES_IDX[s]=i);
+const S={coQ:'',coInd:'',coDir:'',coHi:false,coAp:false,coSC:'',coSD:1,pgQ:'',pgType:'',pgSec:'',pgHi:false,pgSC:'',pgSD:1};
+
+function load(){
+  try{
+    const sc=JSON.parse(localStorage.getItem('co_status')||'{}');
+    const sp=JSON.parse(localStorage.getItem('pg_status')||'{}');
+    const ec=JSON.parse(localStorage.getItem('co_extra')||'[]');
+    const ep=JSON.parse(localStorage.getItem('pg_extra')||'[]');
+    ec.forEach(c=>COS.push(c));
+    ep.forEach(p=>PGS.push(p));
+    COS.forEach(c=>{if(sc[c.company])c._s=sc[c.company];});
+    PGS.forEach(p=>{if(sp[p.program])p._s=sp[p.program];});
+  }catch(e){}
+}
+function saveSt(type,key,val){
+  const k=type==='co'?'co_status':'pg_status';
+  const m=JSON.parse(localStorage.getItem(k)||'{}');m[key]=val;localStorage.setItem(k,JSON.stringify(m));
+}
+function saveExtra(){
+  if(COS.length>COS_BASE)localStorage.setItem('co_extra',JSON.stringify(COS.slice(COS_BASE)));
+  if(PGS.length>PGS_BASE)localStorage.setItem('pg_extra',JSON.stringify(PGS.slice(PGS_BASE)));
+}
+
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.tab,.panel').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');document.getElementById('tab-'+b.dataset.tab).classList.add('on');
+  if(b.dataset.tab==='db')renderDash();
+}));
+
+function initFilters(){
+  const ind=[...new Set(COS.map(c=>c.industry))].sort();
+  const si=document.getElementById('co-ind');
+  ind.forEach(i=>{const o=document.createElement('option');o.value=i;o.textContent=i;si.appendChild(o);});
+  const types=[...new Set(PGS.map(p=>p.type))];
+  const secs=[...new Set(PGS.map(p=>p.sector))].sort();
+  const st=document.getElementById('pg-type'),ss=document.getElementById('pg-sec');
+  types.forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;st.appendChild(o);});
+  secs.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;ss.appendChild(o);});
+}
+
+function toggle(k,el){S[k]=!S[k];el.classList.toggle('on',S[k]);k.startsWith('co')?renderCo():renderPg();}
+
+function dirB(d){
+  if(!d)return'';
+  if(d==='Both directions')return'<span class="bdg bBO">Both</span>';
+  if(d.startsWith('US'))return'<span class="bdg bUS">US to JP</span>';
+  return'<span class="bdg bJP">JP to US</span>';
+}
+function priB(p){return'<span class="bdg b'+(p||'M')[0]+'">'+p+'</span>';}
+function scls(s){return SCLS[STATUSES_IDX[s]??0];}
+function ssel(key,type,val){
+  const c=scls(val);
+  return'<select class="ssel '+c+'" data-key="'+key+'" data-type="'+type+'" onchange="onSt(this)">'+STATUSES.map(s=>'<option'+(s===val?' selected':'')+'>'+s+'</option>').join('')+'</select>';
+}
+function onSt(el){
+  const v=el.value;el.className='ssel '+scls(v);
+  saveSt(el.dataset.type,el.dataset.key,v);
+  if(el.dataset.type==='co'){const c=COS.find(x=>x.company===el.dataset.key);if(c)c._s=v;}
+  else{const p=PGS.find(x=>x.program===el.dataset.key);if(p)p._s=v;}
+  updateStats();
+}
+
+function renderCo(){
+  let d=[...COS];
+  if(S.coQ){const q=S.coQ.toLowerCase();d=d.filter(c=>[c.company,c.role,c.industry,c.notes].join(' ').toLowerCase().includes(q));}
+  if(S.coInd)d=d.filter(c=>c.industry===S.coInd);
+  if(S.coDir)d=d.filter(c=>c.direction===S.coDir);
+  if(S.coHi)d=d.filter(c=>c.priority==='High');
+  if(S.coAp)d=d.filter(c=>(c._s||'Not Started')==='Applied');
+  if(S.coSC)d.sort((a,b)=>S.coSD*((a[S.coSC]||'').localeCompare(b[S.coSC]||'')));
+  document.getElementById('co-rc').textContent=d.length+' result'+(d.length!==1?'s':'');
+  document.getElementById('tc-co').textContent=COS.length;
+  const g={};d.forEach(c=>{(g[c.industry]=g[c.industry]||[]).push(c);});
+  const tb=document.getElementById('co-body');tb.innerHTML='';
+  if(!d.length){tb.innerHTML='<tr><td colspan="9"><div class="empty"><div class="ei">🔍</div><p>No results. Try adjusting filters.</p></div></td></tr>';return;}
+  Object.entries(g).forEach(([ind,rows])=>{
+    const sr=tb.insertRow();sr.className='sec-row';const sc=sr.insertCell();sc.colSpan=9;sc.textContent=ind+' ('+rows.length+')';
+    rows.forEach(c=>{
+      const st=c._s||'Not Started';const tr=tb.insertRow();
+      tr.innerHTML='<td><div class="co-name">'+c.company+'</div><div class="co-hq">'+c.hq+'</div></td>'
+        +'<td><span class="bdg bSEC">'+c.industry+'</span></td>'
+        +'<td>'+dirB(c.direction)+'</td>'
+        +'<td style="font-size:12px;color:var(--muted)">'+c.role+'</td>'
+        +'<td class="dc">'+c.deadline+'</td>'
+        +'<td>'+priB(c.priority)+'</td>'
+        +'<td>'+ssel(c.company,'co',st)+'</td>'
+        +'<td><a class="lnk" href="'+c.url+'" target="_blank">Apply</a></td>'
+        +'<td class="nc">'+c.notes+'</td>';
+    });
+  });
+  updateStats();
+}
+
+function sortCo(col,th){
+  if(S.coSC===col)S.coSD*=-1;else{S.coSC=col;S.coSD=1;}
+  document.querySelectorAll('#co-tbl thead th').forEach(t=>{t.classList.remove('sorted');const sa=t.querySelector('.sa');if(sa)sa.textContent='↕';});
+  th.classList.add('sorted');const sa=th.querySelector('.sa');if(sa)sa.textContent=S.coSD===1?'↑':'↓';
+  renderCo();
+}
+document.querySelectorAll('#co-tbl thead th[data-s]').forEach(th=>th.addEventListener('click',()=>sortCo(th.dataset.s,th)));
+document.getElementById('co-q').addEventListener('input',e=>{S.coQ=e.target.value;renderCo();});
+document.getElementById('co-ind').addEventListener('change',e=>{S.coInd=e.target.value;renderCo();});
+document.getElementById('co-dir').addEventListener('change',e=>{S.coDir=e.target.value;renderCo();});
+
+function renderPg(){
+  let d=[...PGS];
+  if(S.pgQ){const q=S.pgQ.toLowerCase();d=d.filter(p=>[p.program,p.company,p.notes,p.sector].join(' ').toLowerCase().includes(q));}
+  if(S.pgType)d=d.filter(p=>p.type===S.pgType);
+  if(S.pgSec)d=d.filter(p=>p.sector===S.pgSec);
+  if(S.pgHi)d=d.filter(p=>p.priority==='High');
+  if(S.pgSC)d.sort((a,b)=>S.pgSD*((a[S.pgSC]||'').localeCompare(b[S.pgSC]||'')));
+  document.getElementById('pg-rc').textContent=d.length+' result'+(d.length!==1?'s':'');
+  document.getElementById('tc-pg').textContent=PGS.length;
+  const g={};d.forEach(p=>{(g[p.type]=g[p.type]||[]).push(p);});
+  const tb=document.getElementById('pg-body');tb.innerHTML='';
+  if(!d.length){tb.innerHTML='<tr><td colspan="11"><div class="empty"><div class="ei">🔍</div><p>No results.</p></div></td></tr>';return;}
+  Object.entries(g).forEach(([type,rows])=>{
+    const sr=tb.insertRow();sr.className='sec-row';const sc=sr.insertCell();sc.colSpan=11;sc.textContent=type+' ('+rows.length+')';
+    rows.forEach(p=>{
+      const st=p._s||'Not Started';const tr=tb.insertRow();
+      tr.innerHTML='<td style="font-weight:500;font-size:13px">'+p.program+'</td>'
+        +'<td class="co-name">'+p.company+'</td>'
+        +'<td><span class="bdg bTY">'+p.type+'</span></td>'
+        +'<td><span class="bdg bSEC">'+p.sector+'</span></td>'
+        +'<td class="dc">'+p.duration+'</td>'
+        +'<td class="dc">'+p.deadline+'</td>'
+        +'<td class="sc">'+p.salary+'</td>'
+        +'<td>'+priB(p.priority)+'</td>'
+        +'<td>'+ssel(p.program,'pg',st)+'</td>'
+        +'<td class="nc">'+p.notes+'</td>'
+        +'<td><a class="lnk" href="'+p.url+'" target="_blank">Apply</a></td>';
+    });
+  });
+  updateStats();
+}
+
+function sortPg(col,th){
+  if(S.pgSC===col)S.pgSD*=-1;else{S.pgSC=col;S.pgSD=1;}
+  document.querySelectorAll('#pg-tbl thead th').forEach(t=>{t.classList.remove('sorted');const sa=t.querySelector('.sa');if(sa)sa.textContent='↕';});
+  th.classList.add('sorted');const sa=th.querySelector('.sa');if(sa)sa.textContent=S.pgSD===1?'↑':'↓';
+  renderPg();
+}
+document.querySelectorAll('#pg-tbl thead th[data-s]').forEach(th=>th.addEventListener('click',()=>sortPg(th.dataset.s,th)));
+document.getElementById('pg-q').addEventListener('input',e=>{S.pgQ=e.target.value;renderPg();});
+document.getElementById('pg-type').addEventListener('change',e=>{S.pgType=e.target.value;renderPg();});
+document.getElementById('pg-sec').addEventListener('change',e=>{S.pgSec=e.target.value;renderPg();});
+
+function updateStats(){
+  document.getElementById('st-co').textContent=COS.length;
+  document.getElementById('st-pg').textContent=PGS.length;
+  const ap=COS.filter(c=>(c._s||'Not Started')==='Applied').length+PGS.filter(p=>(p._s||'Not Started')==='Applied').length;
+  document.getElementById('st-ap').textContent=ap;
+}
+
+function renderDash(){
+  const cnt={};COS.forEach(c=>{cnt[c.industry]=(cnt[c.industry]||0)+1;});
+  const sorted=Object.entries(cnt).sort((a,b)=>b[1]-a[1]);const mx=sorted[0][1];
+  document.getElementById('ind-chart').innerHTML=sorted.map(([ind,n])=>
+    '<div class="ibar"><div class="iname">'+ind+'</div><div class="btrack"><div class="bfill" style="width:'+Math.round(n/mx*100)+'%"></div></div><div class="icount">'+n+'</div></div>'
+  ).join('');
+  document.getElementById('sleg').innerHTML=STATUSES.map((s,i)=>
+    '<div class="sli"><div class="sdot" style="background:'+SDOT[i]+'"></div><div class="slbl">'+s+'</div></div>'
+  ).join('');
+}
+
+async function aiAdd(tab){
+  const isco=tab==='co';
+  const inp=document.getElementById(tab+'-ai-in');
+  const btn=document.getElementById(tab+'-ai-btn');
+  const msg=document.getElementById(tab+'-ai-msg');
+  const text=inp.value.trim();if(!text)return;
+  btn.disabled=true;btn.innerHTML='<span class="spin"></span>Parsing...';
+  msg.textContent='';msg.className='';
+
+  const schema=isco
+    ?'{"industry":"string (one of: Finance & Banking, Pure Cybersecurity, Big Tech & Cloud, Automotive & Manufacturing, Gaming & Consumer Tech, Defense & Aerospace, Healthcare & Life Sciences, Consulting, Telecom & Infrastructure, Insurance & Risk)","company":"string","hq":"City, Country","direction":"one of: US co. -> Japan office | JP co. -> US office | Both directions","role":"string","deadline":"Mon YYYY or Rolling","priority":"High|Medium|Low","url":"string","notes":"1-2 sentence summary"}'
+    :'{"type":"one of: New Grad Rotational | Government Program | Fellowship | Graduate Hiring","program":"string","company":"string","sector":"string","duration":"string","deadline":"Mon YYYY or Rolling","salary":"string e.g. $80k-$100k","priority":"High|Medium|Low","url":"string","notes":"1-2 sentence summary"}';
+
+  const sys='You are a career data parser for a cybersecurity student. Extract structured data from the user description and return ONLY valid JSON matching this exact schema — no markdown, no preamble:\n'+schema;
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:sys,messages:[{role:'user',content:text}]})});
+    const data=await res.json();
+    const raw=data.content.filter(b=>b.type==='text').map(b=>b.text).join('').replace(/```json|```/g,'').trim();
+    const obj=JSON.parse(raw);
+    obj._s='Not Started';
+    if(isco){
+      obj.direction=(obj.direction||'').replace('->','→');
+      COS.push(obj);saveExtra();
+      renderCo();
+      msg.textContent='Added '+obj.company;msg.className='ai-ok';
+    } else {
+      PGS.push(obj);saveExtra();
+      renderPg();
+      msg.textContent='Added "'+obj.program+'"';msg.className='ai-ok';
+    }
+    inp.value='';
+  }catch(e){
+    msg.textContent='Could not parse — try rephrasing';msg.className='ai-err';
+    console.error(e);
+  }
+  btn.disabled=false;btn.innerHTML='✦ Add with AI';
+  setTimeout(()=>{msg.textContent='';},4000);
+}
+
+document.getElementById('co-ai-in').addEventListener('keydown',e=>{if(e.key==='Enter')aiAdd('co');});
+document.getElementById('pg-ai-in').addEventListener('keydown',e=>{if(e.key==='Enter')aiAdd('pg');});
+
+load();initFilters();renderCo();renderPg();updateStats();
+</script>
+</body>
+</html>
