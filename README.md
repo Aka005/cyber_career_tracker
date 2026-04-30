@@ -39,6 +39,7 @@ open cyber_tracker.html
 
 
 Then open your browser and go to the link your terminal shows — it will look like this:
+```
 <img width="2732" height="1198" alt="image" src="https://github.com/user-attachments/assets/3221f74f-1ad8-4364-8c19-d2424a56e742" />
 
 
